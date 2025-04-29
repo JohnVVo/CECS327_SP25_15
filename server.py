@@ -64,23 +64,33 @@ if __name__ == "__main__":
         query = incomingSocket.recv(maxBytesToReceive).decode() # Receive message from incoming connection (client)
         print(f"Received: {query.lower()}")
         if query.lower() == "1": #Query 1 triggered
-            response = "Calculate response for query 1"
+            res = fetch_from_neonDB(
+                '''
+                SELECT (payload->>'Moisture Meter - MoistureMeter')::float
+                FROM "IOT_virtual"
+                WHERE payload->>'topic' = 'device/SmartFridge'
+                AND to_timestamp((payload->>'timestamp')::bigint) >= NOW() - INTERVAL '3 hours'
+                ''')
+            sum = 0
+            for moistureVal in res:
+                sum += float(moistureVal[0])
+            res = sum / len(res)
         elif query.lower() == "2": #Query 2 triggered
-            response = "Calculate response for query 2"
+            res = "Calculate response for query 2"
         elif query.lower() == "3": #Query 3 triggered
-            response = "Calculate response for query 3"
+            res = "Calculate response for query 3"
         elif query.lower() == "quit": #if the client terminates, then an empty message is sent, this is caught to end the connection
             break
-        print(f"Returning: {response}")
-        res = fetch_from_neonDB(
-            '''
-            SELECT * FROM "IOT_virtual" 
-            ORDER BY id DESC 
-            LIMIT 5;
-            ''')
-        for row in res:
-            print(row['topic'], row['payload'])
-        incomingSocket.send(response.encode()) # Sends reply to client
+        print(f"Returning: {res}")
+        # res = fetch_from_neonDB(
+        #     '''
+        #     SELECT * FROM "IOT_virtual" 
+        #     ORDER BY id DESC 
+        #     LIMIT 5;
+        #     ''')
+        # for row in res:
+        #     print(row['topic'], row['payload'])
+        incomingSocket.send(str(res).encode()) # Sends reply to client
     # Close access to client socket when finished
     print("Connection Terminated")
     incomingSocket.close()
