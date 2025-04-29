@@ -45,7 +45,7 @@ if __name__ == "__main__":
             response = "Calculate response for query 2"
         elif query.lower() == "3": #Query 3 triggered
             response = "Calculate response for query 3"
-        if query.decode().lower() == "quit": #if the client terminates, then an empty message is sent, this is caught to end the connection
+        elif query.lower() == "quit": #if the client terminates, then an empty message is sent, this is caught to end the connection
             break
         print(f"Returning: {response}")
         incomingSocket.send(response.encode()) # Sends reply to client

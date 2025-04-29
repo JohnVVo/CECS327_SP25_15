@@ -31,19 +31,19 @@ if __name__ == "__main__":
     
     # Sends message(s) to the server
     while True:
-        message = input("Please enter your query [1-3]: ")
-        #1. What is the average moisture inside my kitchen fridge in the past three hours?
-        #2. What is the average water consumption per cycle in my smart dishwasher?
-        #3. Which device consumed more electricity among my three IoT devices (two refrigerators and a dishwasher)?
-        if message == "1" or message == "2" or message == "3":
-            TCPSocket.send(message.encode()) # Send message to the server
-        elif message.lower() == "quit":
+        message = input("""Please enter your query [1-3]:\n
+        1. What is the average moisture inside my kitchen fridge in the past three hours?\n
+        2. What is the average water consumption per cycle in my smart dishwasher?\n
+        3. Which device consumed more electricity among my three IoT devices (two refrigerators and a dishwasher)?\n""")
+        while message not in ["1", "2", "3", "quit"]:
+            message = input("""Sorry, this query cannot be processed. Please try one of the following:\n
+            1. What is the average moisture inside my kitchen fridge in the past three hours?\n
+            2. What is the average water consumption per cycle in my smart dishwasher?\n
+            3. Which device consumed more electricity among my three IoT devices (two refrigerators and a dishwasher)?\n""")
+
+        TCPSocket.send(message.encode()) # Send message to the server
+        if message.lower() == "quit":
             break
-        else:
-            print("Sorry, this query cannot be processed. Please try one of the following:\n" \
-            "[1] What is the average moisture inside my kitchen fridge in the past three hours?\n" \
-            "[2] What is the average water consumption per cycle in my smart dishwasher?\n" \
-            "[3] Which device consumed more electricity among my three IoT devices (two refrigerators and a dishwasher)?")
         serverResponse = TCPSocket.recv(maxBytesToReceive) # Receive response from server
         print("Server response: ", serverResponse.decode())
     
