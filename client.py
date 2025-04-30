@@ -31,15 +31,17 @@ if __name__ == "__main__":
     
     # Sends message(s) to the server
     while True:
-        message = input("""Please enter your query [1-3]:\n
+        message = input("""\n
         1. What is the average moisture inside my kitchen fridge in the past three hours?\n
         2. What is the average water consumption per cycle in my smart dishwasher?\n
-        3. Which device consumed more electricity among my three IoT devices (two refrigerators and a dishwasher)?\n""")
+        3. Which device consumed more electricity among my three IoT devices (two refrigerators and a dishwasher)?\n
+        Please enter your query [1-3]: """)
         while message not in ["1", "2", "3", "quit"]:
             message = input("""Sorry, this query cannot be processed. Please try one of the following:\n
-            1. What is the average moisture inside my kitchen fridge in the past three hours?\n
-            2. What is the average water consumption per cycle in my smart dishwasher?\n
-            3. Which device consumed more electricity among my three IoT devices (two refrigerators and a dishwasher)?\n""")
+        1. What is the average moisture inside my kitchen fridge in the past three hours?\n
+        2. What is the average water consumption per cycle in my smart dishwasher?\n
+        3. Which device consumed more electricity among my three IoT devices (two refrigerators and a dishwasher)?\n
+        Please enter your query [1-3]: """)
 
         TCPSocket.send(message.encode()) # Send message to the server
         if message.lower() == "quit":
